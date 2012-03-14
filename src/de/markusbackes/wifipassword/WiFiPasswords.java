@@ -1,6 +1,7 @@
 package de.markusbackes.wifipassword;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +31,17 @@ public class WiFiPasswords extends ListActivity
         setListAdapter(pws);
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, ((HashMap<String, String>)adapterView.getItemAtPosition(i)).get("psk"));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, ((HashMap<String, String>)adapterView.getItemAtPosition(i)).get("ssid"));
+                startActivity(Intent.createChooser(sharingIntent, "Teile Schlüssel"));
+                return true;
+            }
+        });
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
