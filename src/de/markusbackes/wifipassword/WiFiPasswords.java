@@ -19,13 +19,13 @@ public class WiFiPasswords extends ListActivity
     {
         super.onCreate(savedInstanceState);
 
-            List<HashMap<String, String>> passwords = new PasswordReader().readPasswords();
+        List<HashMap<String, String>> passwords = new PasswordReader().readPasswords();
 
         MySimpleAdapter pws = new MySimpleAdapter(
                 this,
                 passwords,
                 R.layout.list_item,
-                new String[] { "line1","line2" },
+                new String[] { "ssid","psk" },
                 new int[] { R.id.text1, R.id.text2 } );
         setListAdapter(pws);
         ListView lv = getListView();
@@ -35,7 +35,7 @@ public class WiFiPasswords extends ListActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView tv = (TextView) view.findViewById(R.id.text2);
                 if(tv.getText().toString().matches("\\*{20}")){
-                    tv.setText(((HashMap<String, String>)adapterView.getItemAtPosition(i)).get("line2"));
+                    tv.setText(((HashMap<String, String>)adapterView.getItemAtPosition(i)).get("psk"));
                 } else {
                     tv.setText("********************");
                 }

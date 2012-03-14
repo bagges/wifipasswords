@@ -9,10 +9,9 @@ import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
- * User: markus
+ * User: markus backes
  * Date: 02.01.12
  * Time: 21:35
- * To change this template use File | Settings | File Templates.
  */
 public class PasswordReader {
     public  List<HashMap<String, String>> readPasswords() {
@@ -27,28 +26,23 @@ public class PasswordReader {
             d.flush();
             DataInputStream is = new DataInputStream(p2.getInputStream());
             String line = is.readLine();
-            String ssid = "";
-            String key = "";
             while(line != null) {
                 if(line.contains("network")){
+                    line = is.readLine();
+                    map = new HashMap<String, String>();
                     while(line != null && !line.contains("}")){
-                        if(line.contains("ssid=\"")){
-                            ssid = line.substring(line.indexOf("\"") + 1, line.lastIndexOf("\""));
-                        }
-                        if(line.contains("psk")){
-                            key = line.substring(line.indexOf("\"") + 1, line.lastIndexOf("\""));
+                        line = line.replace("\n", "").replace("\r", "").replace("\t", "").replace("\"", "");
+                        if(line.matches(".+=.+")){
+                            map.put(line.substring(0, line.indexOf("=")), line.substring(line.indexOf("=") + 1, line.length()));
                         }
                         line = is.readLine();
                     }
-                    map = new HashMap<String, String>();
-                    map.put("line1", ssid);
-                    map.put("line2", key);
                     list.add(map);
                 }
                 line = is.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return list;
     }
