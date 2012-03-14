@@ -1,3 +1,17 @@
+/**
+This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package de.markusbackes.wifipassword;
 
 import android.app.ListActivity;
@@ -11,15 +25,21 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Created by IntelliJ IDEA.
+ * User: markus
+ * Date: 02.01.12
+ * Time: 22:05
+ */
 public class WiFiPasswords extends ListActivity
 {
     final static String TAG = "WiFiPasswords";
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+		//create new password reader and load passwords from wpa_supplicant.conf
         List<HashMap<String, String>> passwords = new PasswordReader().readPasswords();
 
         MySimpleAdapter pws = new MySimpleAdapter(
@@ -32,6 +52,7 @@ public class WiFiPasswords extends ListActivity
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			//Share password
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -43,6 +64,7 @@ public class WiFiPasswords extends ListActivity
             }
         });
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			//Used to switch between stars and plaintext password
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView tv = (TextView) view.findViewById(R.id.text2);

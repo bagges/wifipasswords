@@ -1,3 +1,17 @@
+/**
+This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package de.markusbackes.wifipassword;
 
 import java.io.DataInputStream;
@@ -19,11 +33,15 @@ public class PasswordReader {
         HashMap<String, String> map;
         ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
         try {
+			//obtain root rights
             p2 = Runtime.getRuntime().exec("su");
             DataOutputStream d=new DataOutputStream(p2.getOutputStream());
+			//Hack to read the contents of wpa_supplicant.conf
             d.writeBytes("cat /data/misc/wifi/wpa_supplicant.conf\n");
             d.writeBytes("exit\n");
             d.flush();
+			
+			//parse the wpa_supplicant.conf
             DataInputStream is = new DataInputStream(p2.getInputStream());
             String line = is.readLine();
             while(line != null) {
@@ -40,7 +58,7 @@ public class PasswordReader {
                     list.add(map);
                 }
                 line = is.readLine();
-            }
+            } // end parse
         } catch (IOException e) {
             e.printStackTrace();
         }
